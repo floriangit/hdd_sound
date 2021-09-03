@@ -15,6 +15,6 @@ USAGE
 * Find your partition which HDD activities shall be soundified: `mount | grep "\ /\ "` to see which is your root (/) partition
 * `ls /sys/block/`
 
-2) start the executable as a daemon, e.g.:
+* start the executable as a daemon, e.g.:
 `./hdd_sound sda & # to soundify partition sda and start this as background task`
 
