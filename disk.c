@@ -88,8 +88,6 @@ int main(int ac, char **av)
 	int ret;
 	int val      = 0;
 	int old_val  = 1;
-	int rval     = 0;
-	int old_rval = 1;
 	int diff     = 0;
 
 	if(ac > 1) {
@@ -101,7 +99,6 @@ int main(int ac, char **av)
 	while(1) {
 		usleep(1234);
 		fd = open(fstat, O_RDONLY);
-		//fd = open("/sys/block/nvme1n1/stat", O_RDONLY);
 	
 		if(fd < 3) {
 			perror("open");
@@ -119,10 +116,10 @@ int main(int ac, char **av)
 		char *ptr = strtok(str, delim);
 	
 		for(int i = 0; ptr != NULL; i++) {
-			if(i == 6) {
-				val = atoi(str);
+			if(i == 2 || i == 6) { /* 2 = READ, 6 = WRITE */
+				val = atoi(ptr);
 				diff = val - old_val;
-				if(diff > 100) {
+				if(diff > 1024) {
 					play(MEDIUM);
 					old_val = val;
 					break;
@@ -130,20 +127,6 @@ int main(int ac, char **av)
 				if(diff > 0) {
 					play(SHORT);
 					old_val = val;
-					break;
-				}
-			}
-			else if(i == 2) {
-				rval = atoi(str);
-				diff = rval - old_rval;
-				if(diff > 100) {
-					play(MEDIUM);
-					old_rval = rval;
-					break;
-				}
-				if(diff > 0) {
-					play(SHORT);
-					old_rval = rval;
 					break;
 				}
 			}
