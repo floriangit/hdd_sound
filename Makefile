@@ -1,4 +1,4 @@
-TARGET ?= hhd_sound
+TARGET ?= hdd_sound
 SRC_DIRS ?= ./
 
 SRCS := disk.c
