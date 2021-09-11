@@ -4,16 +4,15 @@
 #include <string.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 
 #include <pulse/simple.h>
 #include <pulse/error.h>
-#include <pulse/def.h>
 
 /* WAV files */
 #include "short.h"
+#include "short2.h"
 #include "medium.h"
+#include "medium2.h"
 
 #define WAV_HEADER_LEN (44)
 
@@ -22,8 +21,9 @@ enum {
     MEDIUM
 };
 
-static int play(int mode) {
- 
+static int play(int mode) 
+{
+    int r = rand() % 2;
     static const pa_sample_spec ss = {
         .format = PA_SAMPLE_S16LE,
         .rate = 48000,
@@ -33,7 +33,7 @@ static int play(int mode) {
     static pa_buffer_attr ba = {
 	.maxlength = -1,
 	.tlength = -1,
-	.prebuf = 320,
+	.prebuf = -1,
 	.minreq = -1,
 	.fragsize = -1,
     };
@@ -51,10 +51,18 @@ static int play(int mode) {
     switch(mode) {
         int ret;
         case SHORT:
-	    ret = pa_simple_write(s, (out_short_clean_wav + WAV_HEADER_LEN), out_short_clean_wav_len - WAV_HEADER_LEN, &error);
+	    if(r) {
+	        ret = pa_simple_write(s, (out_short_clean_wav + WAV_HEADER_LEN), out_short_clean_wav_len - WAV_HEADER_LEN, &error);
+	    } else {
+	        ret = pa_simple_write(s, (out2_short_clean_wav + WAV_HEADER_LEN), out2_short_clean_wav_len - WAV_HEADER_LEN, &error);
+	    }
             break;
         case MEDIUM:
-	    ret = pa_simple_write(s, (out_clean_wav + WAV_HEADER_LEN), out_clean_wav_len - WAV_HEADER_LEN, &error);
+	    if(r) {
+	        ret = pa_simple_write(s, (out_clean_wav + WAV_HEADER_LEN), out_clean_wav_len - WAV_HEADER_LEN, &error);
+	    } else {
+	        ret = pa_simple_write(s, (out_clean2_wav + WAV_HEADER_LEN), out_clean2_wav_len - WAV_HEADER_LEN, &error);
+	    }
             break;
         default:
             break;
