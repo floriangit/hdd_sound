@@ -15,7 +15,7 @@ BUILD
 -----
 `make`
 
-USAGEffmpeg -i sample.avi -q:a 0 -map a sample.mp3
+USAGE
 -----
 * Find your partition which HDD activities shall be soundified: `mount | grep "\ /\ "` to see which is your root (/) partition
 * `ls /sys/block/`
